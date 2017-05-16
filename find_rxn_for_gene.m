@@ -1,5 +1,6 @@
-function [rxnNames, rxn_genes, rxns] = find_rxn_for_gene(model1, model2, Gene)
+function [rxnNames, rxn_mets, rxns] = find_rxn_for_gene(model1, model2, Gene, add_or_del)
   
+ if add_or_del
   GeneId = strmatch(Gene, model2.genes_name);
   rxn_ids2 = get_critical_rxns(model2, GeneId); 
   rxnName = model2.rxnNames(rxn_ids2);
@@ -28,10 +29,16 @@ function [rxnNames, rxn_genes, rxns] = find_rxn_for_gene(model1, model2, Gene)
   
   if K == 0
       rxns =[];
-      rxn_genes =[];
+      rxn_mets =[];
       rxnNames =[];
   end    
-     
+ else
+    GeneId = strmatch(Gene, model1.genes_unique_names);
+    rxn_ids1 = get_critical_rxns(model1, GeneId); 
+    rxnNames = model2.rxnNames(rxn_ids1); 
+    rxns =[];
+    rxn_mets =[];
+ end    
 end
 
 
