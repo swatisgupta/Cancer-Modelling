@@ -10,6 +10,9 @@ function [rxnNames, rxn_genes, rxns] = find_rxn_for_gene(model1, model2, Gene)
   for i = 1:n_reactions
     if isempty(find(model1.recon2RxnMap == rxn_ids2(i), 1)) == 1  
      rxnS = recon2.S(:,rxn_ids2(i));
+     if isempty(rxnS)
+         continue;
+     end    
      mets = find(rxnS);
      mets1 = arrayfun(@(x) find(model1.recon2MetMap == x, 1), mets);
      if sum(isempty(mets1)) > 0
