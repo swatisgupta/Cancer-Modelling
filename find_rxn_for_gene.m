@@ -35,7 +35,7 @@ function [rxnNames, rxn_mets, rxns] = find_rxn_for_gene(model1, model2, Gene, ad
  else
     GeneId = strmatch(Gene, model1.genes_unique_names);
     rxn_ids1 = get_critical_rxns(model1, GeneId); 
-    rxnNames = model2.rxnNames(rxn_ids1); 
+    rxnNames = model1.rxnNames(rxn_ids1); 
     rxns =[];
     rxn_mets =[];
  end    
