@@ -46,15 +46,20 @@ best_iter = iter;
 while ~isstable && iter < 100
     
     %% option 1
-   [gene, g_a, g_d] = get_next_gene(model, cellineId, g_a, g_d, add_if_true); 
-   [rxnNames, rxns] = find_rxn_for_gene(model,recon2, gene);
-  
-   rxns_to_use = 1;
+   found_reactions = 0;
    
-   rxn_used{iter} = rxns;
-   operation_used{iter} = add_if_true;
+   while found_reactions == 0
+      [gene, g_a, g_d] = get_next_gene(model, cellineId, g_a, g_d, add_if_true); 
+      [rxnNames, meta, rxn] = find_rxn_for_gene(model,recon2, gene);
+      rxns_to_use = 1; 
+      rxn_used{iter} = rxns;
+      operation_used{iter} = add_if_true;
+      if ~isempty(rxn_used{iter})
+          found_reactions = 1;
+      end    
+   end 
    
-   model = modify_model(model, rxnNames, rxns, rxns_to_use, add_if_true); 
+   model = modify_model(model, rxnNames, meta, rxns, rxns_to_use,  add_if_true); 
    EG_r1m_FVA_id = essFVA(model);
    accuracy_new = evaluateModel(model, celline);
    
