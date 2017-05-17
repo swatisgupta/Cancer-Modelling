@@ -1,3 +1,6 @@
+clc;
+clear;
+
 load('../Class_files/Achiles.mat');
 load('../Class_files/CCLE.mat');
 load('../Class_files/recon1.mat');
@@ -51,15 +54,15 @@ essGM = [];
 while ~isstable && iter < 4
 
     found_reactions = 0;
-	while found_reactions == 0
-        [gene,g_a,g_d] = get_next_gene(essG,essGM,g_a,g_d,add_if_true);
-        [rxnNames,meta,rxn] = find_rxn_for_gene(model,recon2,gene,add_if_true);
+	while found_reactions == 0  %#ok<ALIGN>
+       [gene,g_a,g_d] = get_next_gene(essG,essGM,g_a,g_d,add_if_true);
+       [rxnNames,meta,rxns] = find_rxn_for_gene(model,recon2,gene,add_if_true);
         rxns_to_use = 1;
         %rxn_used{iter} = rxns;
         %operation_used{iter} = add_if_true;
-        if ~isempty(rxn)
+         if ~isempty(rxns)
             found_reactions = 1;
-        end
+         end
     end
    
     model = modify_model(model,rxnNames,meta,rxns,rxns_to_use,add_if_true);
