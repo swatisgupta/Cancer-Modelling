@@ -1,4 +1,4 @@
-function egenes = essFVA(model)
+function egenes = essFBA(model)
 
  biomass = model.biomass_rxn;
  ngenes = length(model.genes);
@@ -15,10 +15,10 @@ function egenes = essFVA(model)
          %fprintf('%d\n',i);
      end
  end
- fprintf('FBA: found%d essential genes\n', length(egenes));
+ fprintf('FBA: found %d essential genes\n', sum(egenes));
 end
 
-function new_model = knockdown(model,reaction)
+function new_model = knockdown(model,reaction,x)
     new_model = model;
     for i = 1 : length(reaction)
         if (eval(model.rules{reaction(i)})<1)
