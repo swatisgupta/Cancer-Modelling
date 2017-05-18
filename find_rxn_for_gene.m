@@ -15,14 +15,14 @@ function [rxnNames, rxn_mets, rxns] = find_rxn_for_gene(model1, model2, Gene, ad
          continue;
      end    
      mets = find(rxnS);
-     mets1 = arrayfun(@(x) find(model1.recon2MetMap == x, 1), mets, 'UniformOutput', false);
-     if sum(cellfun(@isempty, mets1)) > 0
-      fprintf('Need to add metabolites too\n');   
-      continue;
-     end 
+%      mets1 = arrayfun(@(x) find(model1.recon2MetMap == x, 1), mets, 'UniformOutput', false);
+%      if sum(cellfun(@isempty, mets1)) > 0
+%       fprintf('Need to add metabolites too\n');   
+%       continue;
+%      end 
      k = k+1;
      rxnNames(k) = rxnName(i);
-     rxn_mets{k} = model1.metNames(cell2mat(mets1))';
+     rxn_mets{k} = model2.metNames(mets)';
      rxns{k} = rxnS(mets)';      
     end  
   end  
