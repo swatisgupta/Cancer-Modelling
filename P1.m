@@ -17,6 +17,8 @@ essG = essGenes(Achiles,CCLE,celline,ge_threshold);
 %% Initial Model
 
 recon1_m = defineHumanMediaRPMI(recon1);
+model = recon1_m;
+rxnValid = 1:length(recon2.rxnNames);
 
 %for i=4:4 %length(id_A)
 % i = 4; 
@@ -90,6 +92,30 @@ while ~isstable && iter < 10
    end
    
    iter = iter + 1;
+end
+
+%% Add reaction to the model
+function [model_new,rxnValid] = increaseModel(model,recon2,rxnValid)
+    added = 0;
+    model_new = model;
+    while added < 5 && ~isempty(rxnValid)
+        id = datasample(rxnValid,1);
+        fprintf('Reaction %d (Added %d)\n',id,added);
+        rxnValid = setdiff(rxnValid,id);
+        rxn_name = recon2.rxnNames(id);
+        rxn_name = rxn_name{1};
+        met_names = recon2.metNames(recon2.S(:,id)~=0).';
+        if isequal(sort(recon2.metNames(recon2.S(:,id)==1)),sort(recon2.metNames(recon2.S(:,id)==-1)))
+            continue
+        end
+        S_new_sparse = full(recon2.S(:,id));
+        S_new = S_new_sparse(S_new_sparse~=0).';
+        try
+            [model_new,~] = addReaction(model_new,rxn_name,met_names,S_new);
+        catch
+        end
+        added = length(model_new.rxnNames) - length(model.rxnNames);
+    end
 end
 
 %% Select a gene
