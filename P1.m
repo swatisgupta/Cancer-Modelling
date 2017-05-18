@@ -1,6 +1,3 @@
-clc;
-clear;
-
 load('../Class_files/Achiles.mat');
 load('../Class_files/CCLE.mat');
 load('../Class_files/recon1.mat');
@@ -49,24 +46,27 @@ g_d = [];
 a = 0;
 d = 0;
 iter = 1;
-essGM = [];
+essGM = essGM_best;
 
-while ~isstable && iter < 4
+while ~isstable && iter < 10
 
     found_reactions = 0;
-	while found_reactions == 0  %#ok<ALIGN>
+	while found_reactions < 5  %#ok<ALIGN>
        [gene,g_a,g_d] = get_next_gene(essG,essGM,g_a,g_d,add_if_true);
+       fprintf('Gene %s (Add %d)\n',gene{1},add_if_true);
        [rxnNames,meta,rxns] = find_rxn_for_gene(model,recon2,gene,add_if_true);
         rxns_to_use = 1;
         %rxn_used{iter} = rxns;
         %operation_used{iter} = add_if_true;
-         if ~isempty(rxns)
-            found_reactions = 1;
-         end
+        if ~isempty(rxnNames)
+            found_reactions = found_reactions + 1;
+            model = modify_model(model,rxnNames,meta,rxns,rxns_to_use,add_if_true);
+            add_if_true = ~add_if_true;
+        end
     end
    
-    model = modify_model(model,rxnNames,meta,rxns,rxns_to_use,add_if_true);
 	[acc, essGM] = evaluateModel(model, essG);
+    fprintf('Iteration %d (%f)\n',iter,acc);
    
    if acc > acc_best
        acc_best = acc;

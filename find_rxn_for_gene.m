@@ -22,7 +22,7 @@ function [rxnNames, rxn_mets, rxns] = find_rxn_for_gene(model1, model2, Gene, ad
 %      end 
      k = k+1;
      rxnNames(k) = rxnName(i);
-     rxn_mets{k} = model2.metNames(mets)';
+     rxn_mets{k} = model2.metNames(mets,:)';
      rxns{k} = rxnS(mets)';      
     end  
   end  
