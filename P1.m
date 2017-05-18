@@ -95,20 +95,20 @@ while ~isstable && iter < 10
 end
 
 %% Add reaction to the model
-function [model_new,rxnValid] = increaseModel(model,recon2,rxnValid)
+function [model_new,rxnValid] = increaseModel(model1,model2,rxnValid)
     added = 0;
-    model_new = model;
+    model_new = model1;
     while added < 5 && ~isempty(rxnValid)
         id = datasample(rxnValid,1);
         fprintf('Reaction %d (Added %d)\n',id,added);
         rxnValid = setdiff(rxnValid,id);
-        rxn_name = recon2.rxnNames(id);
+        rxn_name = model2.rxnNames(id);
         rxn_name = rxn_name{1};
-        met_names = recon2.metNames(recon2.S(:,id)~=0).';
-        if isequal(sort(recon2.metNames(recon2.S(:,id)==1)),sort(recon2.metNames(recon2.S(:,id)==-1)))
+        met_names = model2.metNames(model2.S(:,id)~=0).';
+        if isequal(sort(model2.metNames(model2.S(:,id)==1)),sort(model2.metNames(model2.S(:,id)==-1)))
             continue
         end
-        S_new_sparse = full(recon2.S(:,id));
+        S_new_sparse = full(model2.S(:,id));
         S_new = S_new_sparse(S_new_sparse~=0).';
         try
             [model_new,~] = addReaction(model_new,rxn_name,met_names,S_new);
