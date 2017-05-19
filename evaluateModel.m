@@ -1,4 +1,4 @@
-function [accuracy, essGM] = evaluateModel(model, essG)
+function [accuracy, essGM, essGM_id] = evaluateModel(model, essG)
 
     essGM_id = essFBA(model);
     essGM = model.genes_unique_names(unique(model.genes_unique_map(essGM_id>0)));
